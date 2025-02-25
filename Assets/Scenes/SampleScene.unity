@@ -1540,6 +1540,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentBallRigidBody: {fileID: 972624886}
+  currentBallSpringJoint: {fileID: 972624890}
+  detachDuration: 0.2
 --- !u!1 &1747783847
 GameObject:
   m_ObjectHideFlags: 0
