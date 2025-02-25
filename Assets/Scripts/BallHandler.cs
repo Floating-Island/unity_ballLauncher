@@ -15,18 +15,25 @@ public class BallHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!currentBallRigidBody)
+        {
+            return;
+        }
+
         if (Touchscreen.current.primaryTouch.press.IsPressed())
         {
             Vector2 touchPosition = Touchscreen.current.primaryTouch.position.ReadValue();
 
             Vector3 worldPosition = mainCamera.ScreenToWorldPoint(touchPosition);
 
-            if (currentBallRigidBody)
-            {
-                currentBallRigidBody.position = worldPosition;
-            }
+            currentBallRigidBody.position = worldPosition;
+            currentBallRigidBody.bodyType = RigidbodyType2D.Kinematic;
 
             Debug.Log(worldPosition);
+        }
+        else
+        {
+            currentBallRigidBody.bodyType = RigidbodyType2D.Dynamic;
         }
     }
 }
