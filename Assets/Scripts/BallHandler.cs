@@ -68,7 +68,7 @@ public class BallHandler : MonoBehaviour
 
     void LaunchBall()
     {
-        Invoke("DetachBall", detachDuration);
+        Invoke(nameof(DetachBall), detachDuration);
         currentBallRigidBody = null;
     }
 
