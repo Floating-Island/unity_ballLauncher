@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 
 public class BallHandler : MonoBehaviour
 {
+    [SerializeField] private Rigidbody2D currentBallRigidBody;
     private Camera mainCamera;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -16,11 +17,16 @@ public class BallHandler : MonoBehaviour
     {
         if (Touchscreen.current.primaryTouch.press.IsPressed())
         {
-            Vector2 TouchPosition = Touchscreen.current.primaryTouch.position.ReadValue();
+            Vector2 touchPosition = Touchscreen.current.primaryTouch.position.ReadValue();
 
-            Vector3 WorldPosition = mainCamera.ScreenToWorldPoint(TouchPosition);
+            Vector3 worldPosition = mainCamera.ScreenToWorldPoint(touchPosition);
 
-            Debug.Log(WorldPosition);
+            if (currentBallRigidBody)
+            {
+                currentBallRigidBody.position = worldPosition;
+            }
+
+            Debug.Log(worldPosition);
         }
     }
 }
