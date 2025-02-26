@@ -1,6 +1,8 @@
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.EnhancedTouch;
+using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 
 public class BallHandler : MonoBehaviour
 {
@@ -20,6 +22,16 @@ public class BallHandler : MonoBehaviour
         SpawnNewBall();
     }
 
+    private void OnEnable()
+    {
+        EnhancedTouchSupport.Enable();
+    }
+
+    private void OnDisable()
+    {
+        EnhancedTouchSupport.Disable();
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -28,7 +40,7 @@ public class BallHandler : MonoBehaviour
             return;
         }
 
-        if (Touchscreen.current.primaryTouch.press.IsPressed())
+        if (Touch.activeTouches.Count > 0)
         {
             SetBallRigidBodyAsKinematic();
             SetIsDragging();
@@ -52,13 +64,25 @@ public class BallHandler : MonoBehaviour
 
     private void SetBallLocation()
     {
-        Vector2 touchPosition = Touchscreen.current.primaryTouch.position.ReadValue();
+        Vector2 touchPositionsSum = SumTouchPositions();
 
-        Vector3 worldPosition = mainCamera.ScreenToWorldPoint(touchPosition);
+        Vector3 worldPosition = mainCamera.ScreenToWorldPoint(touchPositionsSum);
 
         currentBallRigidBody.position = worldPosition;
 
         Debug.Log(worldPosition);
+    }
+
+    private static Vector2 SumTouchPositions()
+    {
+        Vector2 touchPositionsSum = new Vector2();
+        foreach (Touch touch in Touch.activeTouches)
+        {
+            touchPositionsSum += touch.screenPosition;
+        }
+
+        touchPositionsSum /= Touch.activeTouches.Count;
+        return touchPositionsSum;
     }
 
     private void SetBallRigidBodyAsKinematic()
